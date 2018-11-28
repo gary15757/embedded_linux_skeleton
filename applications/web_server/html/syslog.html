@@ -2,14 +2,6 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <h3>System Log</h3>
-      <div class="container">
-        <form style="margin-left:100px; padding-bottom:10px" class="form-inline">
-          <div class="form-group mx-sm-3 mb-2">
-            <input style="width:350px" type="text" class="form-control" id="filter_input" placeholder="Filter">
-          </div>
-          <button style="width: 100px" type="button" class="btn btn-primary mb-2 btn-md" id="syslog-filter">Filter</button>
-        </form>
-      </div>
       <textarea class="form-control" rows="20" id="text_log" readonly></textarea>
       <br>
       <div class="col-md-12 text-center">
@@ -31,38 +23,8 @@ $(function () {
         showSyslog();
         $( "#syslog-refresh" ).click(function() {
             showSyslog();
-            document.getElementById('filter_input').value = "";
-        });
-
-        $( "#syslog-filter" ).click(function() {
-            var input = document.getElementById("filter_input").value;
-            if (input == "")
-            {
-                showSyslog();
-            } else
-            {
-                showFilter(input);
-            }
         });
     });
-
-    function showFilter(input) {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open('POST', '/json/syslog', true);
-
-        var formData = new FormData();
-        formData.append('filter', input);
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var filter_content = JSON.parse(this.responseText);
-                text_log.value = filter_content.syslog;
-            }
-        };
-
-        xhr.send(formData);
-    }
 
     function showSyslog() {
         $.getJSON( "/json/syslog", function(data) {
